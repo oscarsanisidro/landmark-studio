@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use Landmark Studio in published work, please cite it as below."
+type: software
+title: "Landmark Studio"
+abstract: "A single-file browser application for digitizing landmarks, semilandmark curves, scales and outlines on photographs for geometric morphometrics, with TPS import and export compatible with tpsDig2, geomorph and MorphoJ."
+authors:
+  - family-names: "Sanisidro"
+    given-names: "Oscar"
+version: "1.0.0"
+date-released: "2026-11-05"
+license: GPL-3.0-or-later
+repository-code: "https://github.com/TU-USUARIO/landmark-studio"
+url: "https://TU-USUARIO.github.io/landmark-studio/"
+keywords:
+  - geometric morphometrics
+  - landmarks
+  - semilandmarks
+  - TPS
+  - digitizing
+  - morphology
