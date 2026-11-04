@@ -8,9 +8,10 @@ authors:
     given-names: "Oscar"
 version: "1.0.0"
 date-released: "2026-11-05"
+doi: "10.5281/zenodo.23965715"
 license: GPL-3.0-or-later
-repository-code: "https://github.com/TU-USUARIO/landmark-studio"
-url: "https://TU-USUARIO.github.io/landmark-studio/"
+repository-code: "https://github.com/oscarsanisidro/landmark-studio"
+url: "https://oscarsanisidro.github.io/landmark-studio/"
 keywords:
   - geometric morphometrics
   - landmarks
