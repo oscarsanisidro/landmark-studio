@@ -35,7 +35,8 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: var(--bg); c
 .sb-sec { padding: 8px 10px; border-bottom: 1px solid var(--line); }
 .sb-title { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
   font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-#projName { font-weight: 700; font-size: 14px; word-break: break-all; }
+#projName { font-weight: 700; font-size: 20px; line-height: 1.25; word-break: break-all; }
+#projFolder, #saveStatus { display: none !important; }
 #elList { overflow-y: auto; }
 .el { display: flex; align-items: center; gap: 6px; padding: 3px 4px; border-radius: 5px; cursor: pointer; }
 .el:hover { background: #f2efe9; }
@@ -51,10 +52,20 @@ html, body { height: 100%; margin: 0; overflow: hidden; background: var(--bg); c
 #guideCanvas { width: 100%; height: 170px; display: block; border-radius: 6px; }
 #guideLabel { margin-top: 4px; font-size: 12px; min-height: 16px; }
 #specSec { flex: 1; display: flex; flex-direction: column; min-height: 0; border-bottom: none; }
-#specFilter { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: 3px 6px; margin-bottom: 4px; }
+#specFilter { display: block; width: calc(100% - 8px); margin: 4px; border: 1px solid var(--line); border-radius: 5px; padding: 5px 8px; font-size: 13px; }
+#specCounts .fclr { margin-left: 6px; border: 1px solid var(--line); background: #fff2cc; border-radius: 8px; padding: 0 6px; font-size: 11px; cursor: pointer; color: var(--ink); }
 #btnCurveNA.on { background: var(--warn); border-color: var(--warn); color: #fff; }
 #specCounts { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-#specList { overflow-y: auto; }
+#specList { overflow-y: auto; scrollbar-gutter: stable; }
+#specHead.sb-title { justify-content: flex-start; gap: 6px; margin-right: 12px; }
+#specHead .sid { flex: 1; min-width: 0; }
+#specHead .col, .spec .col { flex: none; width: 26px; text-align: center; }
+#specHead .col + .col, .spec .col + .col { margin-left: -6px; }
+#specHead .col { font-size: 9px; letter-spacing: 0; overflow: visible; white-space: nowrap; }
+.spec { padding-right: 0 !important; }
+.spec .col { font-size: 13px; font-weight: 700; line-height: 16px; }
+.spec .col.ok { color: var(--ok); }
+.spec .col.bad { color: #fff; background: #e5483e; border-radius: 9px; width: 16px; margin: 0 5px; font-size: 11px; }
 .spec { display: flex; align-items: center; gap: 6px; padding: 3px 4px; border-radius: 5px; cursor: pointer; }
 .spec:hover { background: #f2efe9; }
 .spec.sel { background: #fff2cc; outline: 1px solid #f0c040; }
@@ -139,7 +150,12 @@ button { font-family: inherit; }
 #saveStatus.ok { color: var(--ok); } #saveStatus.warn { color: var(--warn); }
 #guideBox { display: none; }
 
-.el-head { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 6px 4px 2px; }
+.el-head { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 6px 0 2px 4px; display: flex; justify-content: space-between; align-items: center; }
+.el-head .hcol { width: 48px; text-align: center; font-size: 9px; letter-spacing: 0; font-weight: 700; }
+.el .st { flex: none; width: 48px; text-align: center; }
+.el { padding-right: 0 !important; }
+.el.no .st, .el.ok .st { font-size: 14px; } .el.no .st { color: var(--warn); }
+#elList { scrollbar-gutter: stable; }
 .el.off { opacity: .45; }
 
 .menu { position: relative; display: inline-block; }
@@ -164,6 +180,9 @@ button { font-family: inherit; }
 #welcome h3 { color: #fff; font-size: 14px; margin: 18px 0 6px; }
 #welcome p { line-height: 1.5; }
 #welcome b { color: #fff; }
+#welcome .bigpick { display: block; width: 100%; margin: 16px 0 6px; padding: 16px 20px; font-size: 20px; font-weight: 700;
+  background: #ff7a1a; border: none; border-radius: 10px; color: #fff; box-shadow: 0 6px 18px rgba(255,122,26,.35); cursor: pointer; }
+#welcome .bigpick:hover { background: #ff8f3d; }
 .wbtns { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
 .recent { display: flex; flex-direction: column; gap: 4px; }
 .rec { display: flex; justify-content: space-between; gap: 12px; text-align: left; background: #2b2e33; color: #eee; border: 1px solid #44484f;
@@ -213,6 +232,14 @@ pre.example { margin: 6px 0; }
 .menu-list kbd.sc { font: 11px system-ui, sans-serif; color: var(--muted); background: none; border: none; }
 .menu-list button.pending span::after { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #e8884f; margin-left: 6px; vertical-align: middle; }
 #fileMenu .menu-list { min-width: 230px; }
+#layerBar { position: absolute; left: 8px; bottom: 6px; z-index: 4; display: flex; gap: 4px; }
+body:not(.has-project) #layerBar { display: none; }
+.lyr { display: inline-flex; align-items: center; gap: 5px; background: rgba(20,22,26,.78); color: #fff; border: 1px solid rgba(255,255,255,.18);
+  border-radius: 7px; padding: 3px 9px 3px 7px; font-size: 12px; cursor: pointer; }
+.lyr:hover { background: rgba(50,54,60,.9); }
+.lyr svg { width: 17px; height: 17px; flex: none; }
+.lyr.off { color: rgba(255,255,255,.45); text-decoration: line-through; }
+#lyrOutlines:not(.off) svg { color: #2ecc71; } #lyrLinks:not(.off) svg { color: #ff9f0a; }
 #imgName { position: absolute; right: 8px; bottom: 6px; max-width: 45%; font-size: 11px; color: rgba(255,255,255,.75);
   background: rgba(0,0,0,.45); padding: 1px 6px; border-radius: 3px; pointer-events: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -291,7 +318,7 @@ body:not(.has-project) #ctxBar .info { visibility: hidden; }
     <div class="menu" id="fileMenu">
       <button class="btn" id="btnFileMenu"><span data-i18n="tb.file"></span> &#9662;</button>
       <div class="menu-list">
-        <button data-act="new" id="btnNew"><span data-i18n="tb.new"></span></button>
+        <button data-act="new" id="btnNew"><span data-i18n="tb.selectFolder"></span></button>
         <button data-act="open" id="btnOpen"><span data-i18n="tb.open"></span></button>
         <button data-act="importTps" id="btnImportTps"><span data-i18n="fm.importTps"></span></button>
         <div class="menu-sep"></div>
@@ -303,6 +330,8 @@ body:not(.has-project) #ctxBar .info { visibility: hidden; }
     <div class="menu" id="specMenu">
       <button class="btn" id="btnSpecMenu"><span data-i18n="tb.specimens"></span> &#9662;</button>
       <div class="menu-list">
+        <input id="specFilter" type="search" data-i18n-ph="sb.filter" autocomplete="off">
+        <div class="menu-sep"></div>
         <button data-act="template" id="btnTemplate"><span data-i18n="sm.template"></span></button>
         <button data-act="order" id="btnOrder"><span data-i18n="sm.order"></span></button>
         <div class="menu-sep"></div>
@@ -341,8 +370,7 @@ body:not(.has-project) #ctxBar .info { visibility: hidden; }
       <div id="guideLabel"></div>
     </div>
     <div class="sb-sec" id="specSec">
-      <div class="sb-title" data-i18n="sb.specimens"></div>
-      <input id="specFilter" type="search" data-i18n-ph="sb.filter" autocomplete="off">
+      <div class="sb-title" id="specHead"><span class="sid" data-i18n="sb.specimens"></span><span class="col" data-i18n="col.lm" data-i18n-title="col.lm.title"></span><span class="col" data-i18n="col.scale" data-i18n-title="col.scale.title"></span></div>
       <div id="specCounts"></div>
       <div id="specList"></div>
     </div>
@@ -425,6 +453,7 @@ body:not(.has-project) #ctxBar .info { visibility: hidden; }
       <canvas id="viewer"></canvas>
       <div id="stageMsg"></div>
       <div id="imgName"></div>
+      <div id="layerBar"><button class="lyr" id="lyrOutlines" data-layer="Outlines"></button><button class="lyr" id="lyrLinks" data-layer="Links"></button></div>
       <div id="viewHead">
         <div class="vh-row vh-spec">
           <button class="vh-arr" id="btnPrev" data-i18n-title="bar.prev">&#9664;</button>
@@ -1579,6 +1608,40 @@ const FORMAT_ID = 'digitalizadorLM';
 const IMG_RE = /\.(jpe?g|png|tiff?|bmp|gif|webp)$/i;
 
 const DICT = window.DLM_I18N || {};
+Object.assign(DICT, {
+  'tb.selectFolder': { en: 'Select Images Folder', zh: '选择图像文件夹', es: 'Seleccionar carpeta de imágenes' },
+  'welcome.folderTip': { en: 'Tip: put the images in their own folder. Chrome does not allow choosing Downloads, Desktop or Documents directly (it says they “contain system files”); use a subfolder inside them.',
+    zh: '提示：将图像放在单独的文件夹中。Chrome 不允许直接选择“下载”、“桌面”或“文档”（会提示其“包含系统文件”）；请使用其中的子文件夹。',
+    es: 'Consejo: pon las imágenes en una carpeta propia. Chrome no deja elegir directamente Descargas, Escritorio o Documentos (dice que «contienen archivos del sistema»); usa una subcarpeta dentro de ellas.' },
+  'fs.fallback': { en: 'Chrome could not open that folder (%s). Choose it again in the next window (read-only mode).', zh: 'Chrome 无法打开该文件夹（%s）。请在下一个窗口中重新选择（只读模式）。', es: 'Chrome no pudo abrir esa carpeta (%s). Vuelve a elegirla en la siguiente ventana (modo de solo lectura).' },
+  'dr.oneNote': { en: 'Outlines are only a graphic aid (for figures); you only need to draw them on one specimen.', zh: '轮廓仅作为图形辅助（用于绘图）；只需在一个标本上绘制。', es: 'Los contornos son solo un soporte gráfico (para figuras); basta con dibujarlos en un único individuo.' },
+  'io.outExport.title': { en: 'Saves the outlines as a CSV file (ID, curve, point, x, y) that R reads with read.csv() as is', zh: '将轮廓保存为 CSV 文件（ID、curve、point、x、y），R 可直接用 read.csv() 读取', es: 'Guarda los contornos en un CSV (ID, curve, point, x, y) que R lee directamente con read.csv()' },
+  'io.outSaved': { en: 'Outlines saved: %s', zh: '轮廓已保存：%s', es: 'Contornos guardados: %s' },
+  'ex.scale': { en: 'Include the SCALE line of each specimen', zh: '包含每个标本的 SCALE 行', es: 'Incluir la línea SCALE de cada espécimen' },
+  'ex.scaleP': { en: 'Coordinates are always written in pixels of the image (origin at the bottom-left corner, as in tpsDig). geomorph::readland.tps() multiplies them by SCALE when every specimen has one, so in R they come out in mm. Untick this to get the raw pixel coordinates in R.',
+    zh: '坐标始终以图像像素写入（原点在左下角，与 tpsDig 相同）。当每个标本都有 SCALE 时，geomorph::readland.tps() 会将坐标乘以 SCALE，因此在 R 中得到的是毫米。取消勾选可在 R 中得到原始像素坐标。',
+    es: 'Las coordenadas se escriben siempre en píxeles de la imagen (origen en la esquina inferior izquierda, como tpsDig). geomorph::readland.tps() las multiplica por SCALE cuando todos los especímenes la tienen, así que en R salen en mm. Desmárcalo para obtener en R las coordenadas en píxeles.' },
+  'ex.info': { en: 'Writes the landmarks and semilandmarks of every specimen to a TPS file with this name (for geomorph, tpsRelw, MorphoJ…). Saving the project only writes the .lmproj file.', zh: '将所有标本的标志点和半标志点写入以此命名的 TPS 文件（用于 geomorph、tpsRelw、MorphoJ…）。保存项目只会写入 .lmproj 文件。', es: 'Escribe los landmarks y semilandmarks de todos los especímenes en un TPS con este nombre (para geomorph, tpsRelw, MorphoJ…). Guardar el proyecto solo escribe el archivo .lmproj.' },
+  'welcome.p1web': { en: 'Click <b>Select Images Folder</b> and choose the folder with your photos. If it already has a project (.lmproj) it opens it; if not, you give the new project a name and it is created there. To bring in a TPS file, use <b>File ▸ Import TPS</b>.',
+    zh: '点击<b>选择图像文件夹</b>并选择照片所在的文件夹。如果其中已有项目（.lmproj）则直接打开；否则为新项目命名，项目将创建在该文件夹中。要导入 TPS 文件，请使用<b>文件 ▸ 导入 TPS</b>。',
+    es: 'Pulsa <b>Seleccionar carpeta de imágenes</b> y elige la carpeta con tus fotos. Si ya contiene un proyecto (.lmproj) lo abre; si no, das un nombre al proyecto nuevo y se crea allí. Para traer un archivo TPS, usa <b>Archivo ▸ Importar TPS</b>.' },
+  'welcome.p2web': { en: 'The project is a single file (.lmproj) saved next to the images. TPS and other files are only written when you export them.',
+    zh: '项目是一个与图像保存在一起的文件（.lmproj）。TPS 等其他文件仅在导出时写入。',
+    es: 'El proyecto es un único archivo (.lmproj) que se guarda junto a las imágenes. El TPS y otros archivos solo se escriben cuando los exportas.' },
+  'dr.del': { en: 'Delete last outline', zh: '删除最后一条轮廓', es: 'Borrar último contorno' },
+  'dr.del.title': { en: 'Deletes the last outline drawn on this specimen (Del)', zh: '删除此标本上最后绘制的轮廓（Del）', es: 'Borra el último contorno dibujado en este espécimen (Supr)' },
+  'hint.outline1': { en: 'OUTLINES: click to start an outline (also on top of another) · Del deletes the last outline.', zh: '轮廓：单击开始一条轮廓（也可在其他轮廓上）· Del 删除最后一条轮廓。', es: 'CONTORNOS: clic para empezar un contorno (también encima de otro) · Supr borra el último contorno.' },
+  'col.spec': { en: 'Specimen', zh: '标本', es: 'Espécimen' },
+  'col.lm': { en: 'LM', zh: 'LM', es: 'LM' },
+  'col.lm.title': { en: 'Landmarks and semilandmark curves: ✓ complete · ! some missing', zh: '标志点和半标志点曲线：✓ 完成 · ! 有缺失', es: 'Landmarks y curvas de semilandmarks: ✓ completos · ! falta alguno' },
+  'col.scale': { en: 'Scale', zh: '比例尺', es: 'Escala' },
+  'col.scale.title': { en: 'Scale: ✓ defined', zh: '比例尺：✓ 已设置', es: 'Escala: ✓ definida' },
+  'imp.updated': { en: 'Landmarks of the %d specimens updated from %s (same names as the project). Ctrl+Z undoes it.', zh: '已更新 %d 个标本的标志点，来源：%s（与项目中的名称相同）。Ctrl+Z 可撤销。', es: 'Landmarks de los %d especímenes actualizados desde %s (mismos nombres que el proyecto). Ctrl+Z lo deshace.' },
+  'col.placed': { en: 'Placed', zh: '已放置', es: 'Colocado' },
+  'vw.toggle': { en: 'Show / hide on the image', zh: '在图像上显示/隐藏', es: 'Mostrar / ocultar sobre la imagen' },
+  'io.lnExport.title': { en: 'Saves the lines as a CSV file (from, to) that R reads with read.csv() as is', zh: '将连线保存为 CSV 文件（from、to），R 可直接用 read.csv() 读取', es: 'Guarda las líneas en un CSV (from, to) que R lee directamente con read.csv()' },
+  'ex.semis': { en: 'The semilandmarks of the %d curve(s) are always included.', zh: '始终包含 %d 条曲线的半标志点。', es: 'Siempre se incluyen los semilandmarks de las %d curva(s).' },
+});
 let LANG = 'en';
 function t(key) {
   const e = DICT[key];
@@ -1672,23 +1735,13 @@ const linksOf = (tmpl) => (tmpl.links || []).filter((l) => l[0] >= 1 && l[1] >= 
 const outX = (proj, sp, x) => (proj.settings.flipExport !== false && sp.flip && sp.w ? sp.w - x : x);
 const outY = (proj, sp, y) => (proj.settings.flipExport !== false && sp.flipY && sp.h ? sp.h - y : y);
 function outlinesCSV(proj) {
+  // Plain comma-separated, dot decimals, header row, IDs quoted: read.csv(file) works with no extra arguments.
+  const q = (v) => '"' + String(v).replace(/"/g, '""') + '"';
   const rows = [];
   proj.specimens.forEach((s) => (s.outlines || []).forEach((o, c) => o.forEach((p, j) => {
-    rows.push([JSON.stringify(String(s.id)), c + 1, j + 1, outX(proj, s, p.x).toFixed(5), outY(proj, s, p.y).toFixed(5)].join(','));
+    rows.push([q(s.id), c + 1, j + 1, outX(proj, s, p.x).toFixed(5), outY(proj, s, p.y).toFixed(5)].join(','));
   })));
-  return rows.length ? 'ID,curve,point,x,y\r\n' + rows.join('\r\n') + '\r\n' : '';
-}
-function outlinesTPS(proj) {
-  const out = [];
-  proj.specimens.forEach((s) => {
-    const O = s.outlines || []; if (!O.length) return;
-    out.push('LM=0', 'CURVES=' + O.length);
-    O.forEach((o) => { out.push('POINTS=' + o.length); o.forEach((p) => out.push(outX(proj, s, p.x).toFixed(5) + ' ' + outY(proj, s, p.y).toFixed(5))); });
-    if (s.file) out.push('IMAGE=' + s.file);
-    out.push('ID=' + s.id);
-    const f = scaleFactor(s); if (f > 0) out.push('SCALE=' + scaleText(f));
-  });
-  return out.length ? out.join('\r\n') + '\r\n' : '';
+  return rows.length ? 'ID,curve,point,x,y\n' + rows.join('\n') + '\n' : '';
 }
 function parseOutlines(text, fname) {
   text = text.replace(/^﻿/, '');
@@ -1719,8 +1772,6 @@ function parseOutlines(text, fname) {
   }
   return { kind: 'image', base: String(fname || '').replace(/\.(csv|txt)$/i, '').replace(/_(outline|outlines|lines|silueta)$/i, ''), polys: polys.filter((o) => o.length >= 2), bad };
 }
-function linksTPS(tmpl) { const L = linksOf(tmpl); return L.length ? ' 7 ' + nLm(tmpl) + ' ' + L.length + ' 0\r\n' + L.map((l) => l[0] + ' ' + l[1] + ' 0.0').join('\r\n') + '\r\n' : ''; }
-function linksTXT(tmpl) { const L = linksOf(tmpl); return L.length ? L.map((l) => l[0] + ' ' + l[1]).join('\r\n') + '\r\n' : ''; }
 function parseLinks(text) {
   const rows = text.replace(/^﻿/, '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
   const out = []; let bad = 0;
@@ -1930,10 +1981,8 @@ function tpsDecimals(proj) {
 }
 function scaleText(f) { return String(+f.toPrecision(10)); }
 
-function outlinesInTpsOk(proj) { return !(proj.settings.tpsFormat === 'tpsdig' && curvesOf(proj.template).length); }
 function buildTPS(proj, opts) {
   opts = opts || {};
-  const withOut = !!opts.outlines && outlinesInTpsOk(proj);
   const tmpl = proj.template, K = nLm(tmpl), S = nSemis(tmpl), cvs = curvesOf(tmpl);
   const fmt = proj.settings.tpsFormat === 'tpsdig' ? 'tpsdig' : 'geomorph';
   TPS_DEC = tpsDecimals(proj);
@@ -1952,14 +2001,10 @@ function buildTPS(proj, opts) {
         co.semis.forEach((m) => { out.push('POINTS=' + m.length); m.forEach((p) => out.push(xyLine(p))); });
       }
     }
-    if (withOut && s.outlines.length) {
-      out.push('CURVES=' + s.outlines.length);
-      s.outlines.forEach((o) => { out.push('POINTS=' + o.length); o.forEach((p) => out.push(xyLine({ x: outX(proj, s, p.x), y: outY(proj, s, p.y) }))); });
-    }
     if (s.file) out.push('IMAGE=' + s.file);
     out.push('ID=' + s.id);
     const f = scaleFactor(s);
-    if (Number.isFinite(f)) out.push('SCALE=' + scaleText(f));
+    if (opts.scale !== false && Number.isFinite(f)) out.push('SCALE=' + scaleText(f));
   }
   return out.join('\r\n') + '\r\n';
 }
@@ -2209,8 +2254,15 @@ function pickFolder(startIn) {
     const opt = { id: 'lm-project', mode: 'readwrite' }; if (startIn) opt.startIn = startIn;
     return window.showDirectoryPicker(opt).then(async (dir) => {
       setRoot(dir); await rescan(); return true;
-    }).catch((e) => { if (e.name !== 'AbortError') toast(t('fs.cannotOpen', e.message), 'warn'); return false; });
+    }).catch((e) => {
+      if (e.name === 'AbortError') return false;
+      toast(t('fs.fallback', e.message), 'warn');
+      return pickFolderInput();
+    });
   }
+  return pickFolderInput();
+}
+function pickFolderInput() {
   return new Promise((resolve) => {
     const inp = $('dirInput'); inp.value = '';
     inp.onchange = () => {
@@ -2244,10 +2296,12 @@ const hasFile = (path) => !!path && store.files.has(String(path).toLowerCase());
 
 async function writeText(name, text) {
   if (store.root) {
-    const h = await store.root.getFileHandle(name, { create: true });
-    const w = await h.createWritable(); await w.write(text); await w.close();
-    store.files.set(name.toLowerCase(), { path: name, handle: h });
-    return true;
+    try {
+      const h = await store.root.getFileHandle(name, { create: true });
+      const w = await h.createWritable(); await w.write(text); await w.close();
+      store.files.set(name.toLowerCase(), { path: name, handle: h });
+      return true;
+    } catch (e) { /* folder moved, renamed or permission lost: download instead */ }
   }
   download(name, text);
   return true;
@@ -2411,7 +2465,7 @@ function setLang(l) {
   LANG = l; try { localStorage.setItem('lm-lang', l); } catch (e) { }
   const sf = $('specFilter'); if (sf && /^:(todo|pending|pendientes?|未完成)$/i.test(sf.value.trim()) || (sf && sf.value.trim() === kwOld)) sf.value = t('sb.todoKw');
   $('langSel').value = l;
-  applyStatic(); renderAll(); renderWelcome();
+  applyStatic(); updateLayerBar(); renderAll(); renderWelcome();
 }
 $('langSel').addEventListener('change', () => setLang($('langSel').value));
 
@@ -2588,9 +2642,13 @@ async function locateImages() {
   if (store.projHandle) rememberRecent();
 }
 
+let canvasCW = 0, canvasCH = 0, canvasL = null, canvasT = null;
 function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.round(canvas.clientWidth * dpr); canvas.height = Math.round(canvas.clientHeight * dpr);
+  const dpr = window.devicePixelRatio || 1, cw = canvas.clientWidth, ch = canvas.clientHeight, rc = canvas.getBoundingClientRect();
+  // keep the image still on screen when a toolbar above the canvas changes height
+  if (canvasL !== null && imgOK && !virt) { tx -= rc.left - canvasL; ty -= rc.top - canvasT; }
+  canvasCW = cw; canvasCH = ch; canvasL = rc.left; canvasT = rc.top;
+  canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   if (virt) fit(); else render();
 }
@@ -2662,8 +2720,22 @@ function drawSheet() {
   ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('y', ax + 9, Math.max(a.y, 0) + 4);
   ctx.restore();
 }
+const layerOn = (k) => prefs['show' + k] !== false;
+const EYE_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_SHUT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2.5 3.5 6 5 10 5s7.5-1.5 10-5"/><path d="M5 15.5 3 18M9.5 17l-.8 3M14.5 17l.8 3M19 15.5l2 2.5"/></svg>';
+function updateLayerBar() {
+  [['Outlines', 'dr.curves'], ['Links', 'dr.lines']].forEach(([k, lab]) => {
+    const b = $('lyr' + k), on = layerOn(k);
+    b.classList.toggle('off', !on); b.title = t('vw.toggle');
+    b.innerHTML = (on ? EYE_OPEN : EYE_SHUT) + '<span>' + esc(t(lab)) + '</span>';
+  });
+  // the outlines toggle only appears on the specimen(s) that have outlines; links toggle on every specimen
+  const x = sp(); $('lyrOutlines').classList.toggle('hidden', !(x && x.outlines && x.outlines.length));
+}
+function setLayer(k, on) { prefs['show' + k] = !!on; savePrefs(); updateLayerBar(); render(); }
+document.querySelectorAll('#layerBar .lyr').forEach((b) => b.addEventListener('click', () => { const k = b.dataset.layer; setLayer(k, !layerOn(k)); }));
 function drawOutlinesLines(x) {
-  if (x.outlines.length) {
+  if (x.outlines.length && layerOn('Outlines')) {
     ctx.save(); ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = ctx.fillStyle = COL.outline;
     x.outlines.forEach((poly, j) => {
       const q = poly.map((p) => toScreen(p)); if (!q.length) return;
@@ -2677,7 +2749,7 @@ function drawOutlinesLines(x) {
     const last = x.outlines[x.outlines.length - 1], a = toScreen(last[last.length - 1]);
     polyline([a, { x: mouse.x, y: mouse.y }], COL.outlinePrev, 2, [8, 6]);
   }
-  linksOf(P.template).forEach((l, j) => {
+  if (layerOn('Links')) linksOf(P.template).forEach((l, j) => {
     const a = x.lm[l[0] - 1], b = x.lm[l[1] - 1]; if (!isPt(a) || !isPt(b)) return;
     const on = mode === 'draw' && drawTool === 'lines', isSel = on && j === selLine;
     polyline([toScreen(a), toScreen(b)], isSel ? COL.lineSel : COL.line, isSel ? 4 : on ? 2.5 : 1.5);
@@ -2781,14 +2853,14 @@ function renderElements() {
   if (!P || !els().length) { box.innerHTML = '<div class="empty">' + t('js.noTemplate') + '</div>'; return; }
   let h = '', lastType = null;
   els().forEach((e, i) => {
-    if (e.type !== lastType) { h += '<div class="el-head">' + t(e.type === 'lm' ? 'mode.lm' : 'mode.curve') + '</div>'; lastType = e.type; }
+    if (e.type !== lastType) { h += '<div class="el-head"><span>' + t(e.type === 'lm' ? 'mode.lm' : 'mode.curve') + '</span>' + (lastType === null && x ? '<span class="hcol">' + esc(t('col.placed')) + '</span>' : '') + '</div>'; lastType = e.type; }
     let badge, st = '', cls = '';
     if (e.type === 'lm') {
       badge = String(elLm[i] + 1); const p = x ? x.lm[elLm[i]] : null;
-      if (isPt(p)) { st = '✓'; cls = 'ok'; } else if (isMissing(p)) { st = t('js.missing'); cls = 'miss'; }
+      if (isPt(p)) { st = '✓'; cls = 'ok'; } else if (isMissing(p)) { st = t('js.missing'); cls = 'miss'; } else if (x) { st = '✗'; cls = 'no'; }
     } else {
       badge = 'C' + (elCv[i] + 1); const r = x ? x.curves[elCv[i]] : null;
-      if (x && cvIsNA(x, elCv[i])) { st = t('js.missing'); cls = 'miss'; } else if (r && r.length) { st = '✓'; cls = 'ok'; }
+      if (x && cvIsNA(x, elCv[i])) { st = t('js.missing'); cls = 'miss'; } else if (r && r.length) { st = '✓'; cls = 'ok'; } else if (x) { st = '✗'; cls = 'no'; }
     }
     const extra = e.type === 'curve' ? ' <span class="sub">' + t('js.semis', e.n) + (e.from && e.to ? ' · ' + e.from + '→' + e.to : (e.from ? ' · ' + t('js.from', e.from) : '') + (e.to ? ' · ' + t('js.to', e.to) : '')) + (e.smooth ? ' · ~' : '') + '</span>' : '';
     const off = (mode === 'lm' && e.type !== 'lm') || (mode === 'curve' && e.type !== 'curve') || (mode === 'draw' && e.type !== 'lm');
@@ -2797,6 +2869,7 @@ function renderElements() {
       '<span class="badge">' + badge + '</span><span class="nm">' + nm + '</span><span class="st">' + st + '</span></div>';
   });
   box.innerHTML = h;
+  capList(box, '.el');
   const ri = box.querySelector('input.ren');
   if (ri) { ri.focus(); ri.select(); }
   else { const sd = box.querySelector('.el.sel'); if (sd) sd.scrollIntoView({ block: 'nearest' }); }
@@ -2818,13 +2891,15 @@ function specRowHTML(i, dups) {
   if (dup) f.push('<span class="flag err" title="' + esc(t('flag.id.title')) + '">ID</span>');
   if (x.file && !hasFile(x.file)) f.push('<span class="flag err" title="' + esc(t('flag.noimg.title')) + '">' + t('flag.noimg') + '</span>');
   if (!x.file) f.push('<span class="flag info" title="' + esc(t('noimg.label')) + '">' + t('noimg.flag') + '</span>');
-  if (!(scaleFactor(x) > 0)) f.push('<span class="flag" title="' + esc(t('flag.noscale.title')) + '">' + t('flag.noscale') + '</span>');
   if (x.flip) f.push('<span class="flag info" title="' + esc(t('flag.flip.title')) + '">' + t('flag.flip') + '</span>');
   if (x.flipY) f.push('<span class="flag info" title="' + esc(t('flag.flipY.title')) + '">' + t('flag.flipY') + '</span>');
   if (P.guide && P.guide === x.file) f.push('<span class="flag guide" title="' + esc(t('flag.guide.title')) + '">' + t('flag.guide') + '</span>');
   const why = specWhy(x);
-  const mark = st === 'done' ? '<span class="sst ok" title="' + esc(why) + '">✓</span>'
-    : st === 'partial' ? '<span class="sst warn" title="' + esc(why) + '">⚠</span>' : '<span class="sst" title="' + esc(why) + '"></span>';
+  const lmc = st === 'done' ? '<span class="col ok" title="' + esc(why) + '">✓</span>'
+    : st === 'partial' ? '<span class="col bad" title="' + esc(why) + '">!</span>' : '<span class="col" title="' + esc(why) + '"></span>';
+  const sf = scaleFactor(x) > 0;
+  const scc = sf ? '<span class="col ok" title="' + esc(scaleSource(x)) + '">✓</span>' : '<span class="col" title="' + esc(t('flag.noscale.title')) + '"></span>';
+  const mark = lmc + scc;
   return '<div class="spec ' + st + (i === cur ? ' sel' : '') + '" data-i="' + i + '"><span class="sid">' + esc(x.id) + '</span><span class="flags">' + f.join('') + '</span>' + mark + '</div>';
 }
 function specWhy(x) {
@@ -2864,7 +2939,8 @@ function renderSpecRow(i) {
 function updateCounts() {
   if (!P) { $('specCounts').textContent = ''; return; }
   let d = 0, p = 0; P.specimens.forEach((x) => { const st = specState(x); if (st === 'done') d++; else if (st === 'partial') p++; });
-  $('specCounts').textContent = t('js.counts', d, p, P.specimens.length - d - p);
+  const q = $('specFilter').value.trim();
+  $('specCounts').innerHTML = esc(t('js.counts', d, p, P.specimens.length - d - p)) + (q ? '<button class="fclr" title="✕">🔍 ' + esc(q) + ' ✕</button>' : '');
 }
 function applyFilter() {
   const q = $('specFilter').value.trim().toLowerCase();
@@ -2875,11 +2951,22 @@ function applyFilter() {
     else if (q) show = String(x.id).toLowerCase().includes(q) || String(x.file).toLowerCase().includes(q);
     d.style.display = show ? '' : 'none';
   });
+  capList($('specList'), '.spec');
 }
-$('specFilter').addEventListener('input', applyFilter);
+// lists show at most 10 items; beyond that they scroll
+function capList(box, selector) {
+  const items = Array.from(box.querySelectorAll(selector)).filter((d) => d.style.display !== 'none');
+  if (items.length <= 10) { box.style.maxHeight = 'none'; return; }
+  box.style.maxHeight = 'none';
+  const top = box.getBoundingClientRect().top - box.scrollTop;
+  box.style.maxHeight = Math.ceil(items[10].getBoundingClientRect().top - top) + 'px';
+}
+$('specFilter').addEventListener('input', () => { applyFilter(); updateCounts(); });
+$('specFilter').addEventListener('click', (e) => e.stopPropagation());
+$('specCounts').addEventListener('click', (e) => { if (e.target.closest('.fclr')) { $('specFilter').value = ''; applyFilter(); updateCounts(); } });
 
 function updateSpecBar() {
-  const x = sp();
+  const x = sp(); updateLayerBar();
   document.querySelectorAll('.mode').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
   document.body.dataset.mode = mode;
   updateViewHead(); updateCtx();
@@ -3009,7 +3096,7 @@ function updateCtx() {
   $('toolOutline').classList.toggle('on', drawTool === 'outline'); $('toolLines').classList.toggle('on', drawTool === 'lines');
   const L = P ? linksOf(P.template).length : 0, O = x ? x.outlines.length : 0;
   if (selOutline >= O) selOutline = -1;
-  $('btnOutDel').disabled = selOutline < 0; $('btnOutClear').disabled = !O; $('btnOutExport').disabled = !P || !P.specimens.some((y) => y.outlines.length);
+  $('btnOutDel').disabled = !O; $('btnOutClear').disabled = !O; $('btnOutExport').disabled = !P || !P.specimens.some((y) => y.outlines.length);
   $('btnLineExport').disabled = !L;
   $('btnLineDel').disabled = selLine < 0; $('btnLineClear').disabled = !L;
   $('drawInfo').textContent = '';
@@ -3045,12 +3132,14 @@ function setMode(m) {
   if (m === 'lm' || m === 'curve') {
     if (firstOfType(m) >= 0 && elType(sel) !== m) { const k = firstOfType(m, true); sel = k >= 0 ? k : firstOfType(m); }
   }
+  if (m === 'draw' && mode !== 'draw' && drawTool === 'outline' && P) toast(t('dr.oneNote'));
+  if (m === 'draw') { const k = drawTool === 'lines' ? 'Links' : 'Outlines'; if (!layerOn(k)) { prefs['show' + k] = true; savePrefs(); updateLayerBar(); } }
   mode = m;
   canvas.style.cursor = 'crosshair';
   renderElements(); updateSpecBar(); render(); renderGuide();
 }
 document.querySelectorAll('.mode').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
-function setTool(tl) { drawTool = tl; drawing = false; lineStart = -1; selLine = -1; selOutline = -1; if (mode !== 'draw') setMode('draw'); else { updateSpecBar(); render(); } }
+function setTool(tl) { { const k = tl === 'lines' ? 'Links' : 'Outlines'; if (!layerOn(k)) { prefs['show' + k] = true; savePrefs(); updateLayerBar(); } } if (tl === 'outline' && drawTool !== 'outline' && mode === 'draw' && P) toast(t('dr.oneNote')); drawTool = tl; drawing = false; lineStart = -1; selLine = -1; selOutline = -1; if (mode !== 'draw') setMode('draw'); else { updateSpecBar(); render(); } }
 document.querySelectorAll('#ctxBar .seg .b').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool)));
 function selectEl(i) {
   if (!els().length) return;
@@ -3231,19 +3320,7 @@ function finishDraft() {
 }
 function deleteOutline() {
   const x = sp(); if (!x || !x.outlines.length) return;
-  if (selOutline < 0) { flash(t('dr.pick')); return; }
-  x.outlines.splice(selOutline, 1); selOutline = -1; drawing = false; changed();
-}
-function hitOutline(m) {
-  const x = sp(); let best = -1, bd = 7;
-  x.outlines.forEach((o, j) => {
-    for (let i = 0; i < o.length; i++) {
-      const A = toScreen(o[i]), B = toScreen(o[Math.min(i + 1, o.length - 1)]), vx = B.x - A.x, vy = B.y - A.y, L2 = vx * vx + vy * vy || 1;
-      const u = Math.max(0, Math.min(1, ((m.x - A.x) * vx + (m.y - A.y) * vy) / L2));
-      const d = Math.hypot(A.x + u * vx - m.x, A.y + u * vy - m.y); if (d < bd) { bd = d; best = j; }
-    }
-  });
-  return best;
+  x.outlines.pop(); selOutline = -1; drawing = false; changed();
 }
 function deleteLine() {
   if (selLine < 0) { flash(t('ln.pick')); return; }
@@ -3277,8 +3354,8 @@ function backStep() {
 
 const canvasXY = (e) => { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
 function hitLm(m) { return hitLmAt(m); }
-function hitLmAt(m) {
-  const x = sp(); let best = -1, bd = prefs.marker + 4;
+function hitLmAt(m, tol) {
+  const x = sp(); let best = -1, bd = tol || prefs.marker + 4;
   for (let k = 0; k < lmEl.length; k++) { const p = x.lm[k]; if (!isPt(p)) continue; const q = toScreen(p), d = Math.hypot(q.x - m.x, q.y - m.y); if (d <= bd) { bd = d; best = k; } }
   return best;
 }
@@ -3324,18 +3401,13 @@ canvas.addEventListener('mousedown', (e) => {
     render(); updateSpecBar(); return;
   }
   if (mode === 'draw' && drawTool === 'outline') {
-    if (!drawing && !e.shiftKey) {
-      const j = hitOutline(m);
-      if (j >= 0) { selOutline = j; render(); updateSpecBar(); return; }
-    }
-    if (selOutline >= 0 && !drawing) { selOutline = -1; }
     if (!p.inside) { flash(t('fl.outside')); return; }
     if (!drawing || !x.outlines.length) x.outlines.push([{ x: p.x, y: p.y }]);
     else x.outlines[x.outlines.length - 1].push({ x: p.x, y: p.y });
     drawing = true; changed(); return;
   }
   if (mode === 'draw' && drawTool === 'lines') {
-    const k = hitLm(m);
+    const k = hitLmAt(m, Math.max(18, prefs.marker + 10));
     if (k >= 0) {
       selLine = -1;
       if (lineStart < 0 || lineStart === k) { lineStart = lineStart === k ? -1 : k; }
@@ -3458,29 +3530,45 @@ on('btnOutClear', async () => {
 });
 on('btnLineDel', deleteLine);
 const projBase = () => stripExt(store.projFile || (P.name + '.lmproj'));
-async function chooseFormat(title, opts) {
-  const body = '<div class="fmt">' + opts.map((o, i) => '<label class="chk"><input type="radio" name="fmt" value="' + i + '"' + (i ? '' : ' checked') + '> <b>' + esc(o.label) + '</b> <span class="small-muted">' + esc(o.file) + '</span><br><span class="small-muted">' + esc(o.desc) + '</span></label>').join('') + '</div>' +
-    '<p class="small-muted">' + esc(store.root ? t('io.where', store.rootName) : t('sa.download')) + '</p>';
-  let pick = null;
-  await modal({ title, body, buttons: [{ label: t('btn.cancel'), value: null }, { label: t('ex.btn'), value: 'ok', kind: 'primary', keep: () => { pick = opts[+document.querySelector('input[name=fmt]:checked').value]; return false; } }] });
-  return pick;
+// Asks where to save (or downloads), so it never depends on the project folder still being where it was.
+async function saveFileAs(name, text, desc, mime, ext) {
+  if (window.showSaveFilePicker) {
+    try {
+      const opt = { id: 'lm-export', suggestedName: name, types: [{ description: desc, accept: { [mime]: [ext] } }] };
+      const h = await window.showSaveFilePicker(opt);
+      const w = await h.createWritable(); await w.write(text); await w.close();
+      return h.name;
+    } catch (e) {
+      if (e.name === 'AbortError') return null;
+    }
+  }
+  download(name, text); return name;
 }
-async function writeOut(name, text) {
-  try { await writeText(name, text); toast(t('io.saved', name)); } catch (e) { toast(t('n.saveFail', e.message), 'warn'); }
+// Same export flow for outlines and links: a CSV that read.csv() reads as is, saved with the native
+// "Save as" dialog (name and place editable); without it, a name box here and a download.
+async function exportCsv(def, text, title) {
+  def = String(def).replace(/[\\/:*?"<>|]/g, '_');
+  if (!window.showSaveFilePicker) {
+    let nm = null;
+    await modal({ title, body: '<label class="fld">' + esc(t('sa.name')) + '<span class="row"><input id="outName" type="text" autofocus><span class="small-muted">.csv</span></span></label>',
+      onOpen: (b) => { const i = b.querySelector('#outName'); i.value = def; i.addEventListener('keydown', (e) => { if (e.key === 'Enter') $('modalFoot').querySelector('.primary').click(); }); setTimeout(() => i.select(), 40); },
+      buttons: [{ label: t('btn.cancel'), value: null }, { label: t('ex.btn'), value: 'ok', kind: 'primary', keep: () => { nm = $('outName').value.trim().replace(/[\\/:*?"<>|]/g, '_').replace(/\.csv$/i, ''); if (!nm) { toast(t('fb.badName'), 'warn'); return true; } return false; } }] });
+    if (!nm) return;
+    def = nm;
+  }
+  const name = await saveFileAs(def + '.csv', text, 'CSV', 'text/csv', '.csv');
+  if (name) toast(t('io.saved', name));
 }
 on('btnOutExport', async () => {
-  if (!P) return; const b = projBase();
-  const f = await chooseFormat(t('io.outExportT'), [
-    { label: 'CSV', file: b + '_outlines.csv', desc: t('io.outCsv'), make: () => outlinesCSV(P) },
-    { label: 'TPS (tpsDig)', file: b + '_outlines.tps', desc: t('io.outTps'), make: () => outlinesTPS(P) }]);
-  if (f) await writeOut(f.file, f.make());
+  if (!P) return;
+  const text = outlinesCSV(P); if (!text) return;
+  // default name: the specimen the outlines were drawn on (the current one if it has outlines)
+  const x = sp(), src = x && x.outlines.length ? x : P.specimens.find((y) => y.outlines.length);
+  await exportCsv(((src && src.id) || projBase()) + '_outlines', text, t('io.outExportT'));
 });
 on('btnLineExport', async () => {
-  if (!P || !linksOf(P.template).length) return; const b = projBase();
-  const f = await chooseFormat(t('io.lnExportT'), [
-    { label: t('io.lnTxtL'), file: b + '_links.txt', desc: t('io.lnTxt'), make: () => linksTXT(P.template) },
-    { label: 'tps (tpsRelw)', file: b + '_links_tps.txt', desc: t('io.lnTps'), make: () => linksTPS(P.template) }]);
-  if (f) await writeOut(f.file, f.make());
+  if (!P || !linksOf(P.template).length) return;
+  await exportCsv(projBase() + '_links', linksCSV(P.template), t('io.lnExportT'));
 });
 async function ensureDims(x) {
   if (x.w && x.h) return true;
@@ -3664,7 +3752,18 @@ $('elList').addEventListener('click', (e) => {
 });
 $('specList').addEventListener('click', (e) => { const d = e.target.closest('.spec'); if (d) openSpec(+d.dataset.i); });
 window.addEventListener('resize', () => { resizeCanvas(); renderGuide(); fitElName(); });
+// The stage changes height when the context bar wraps (e.g. Scale mode has more buttons). Without this the
+// canvas bitmap was stretched to the new size and the cursor no longer matched where points were drawn.
+if (window.ResizeObserver) new ResizeObserver(() => {
+  const dpr = window.devicePixelRatio || 1;
+  if (canvas.clientWidth !== canvasCW || canvas.clientHeight !== canvasCH || canvas.width !== Math.round(canvas.clientWidth * dpr) || canvas.height !== Math.round(canvas.clientHeight * dpr)) resizeCanvas();
+}).observe(canvas);
 
+async function cmdSelectFolder() {
+  if (!(await confirmDiscard())) return;
+  if (!(await pickFolder())) return;
+  if (projectFilesInRoot().some((f) => /\.lmproj$/i.test(f))) openFromFolder(); else newProjectWindow();
+}
 async function cmdNew() {
   if (!(await confirmDiscard())) return;
   if (!(await pickFolder())) return;
@@ -3675,6 +3774,8 @@ async function newProjectWindow() {
   const body = document.createElement('div');
   body.innerHTML =
     '<p><b>' + esc(t('new.folder')) + '</b> ' + esc(store.rootName) + '</p>' +
+    '<label class="fld">' + esc(t('new.projName')) + '<span class="row"><input id="npName" type="text" autofocus><span class="small-muted">.lmproj</span></span></label>' +
+    (store.root ? '<p class="small-muted">' + esc(t('new.projWhere', store.rootName)) + '</p>' : '') +
     '<label class="chk"><input id="npSub" type="checkbox"> ' + esc(t('new.sub')) + '</label>' +
     '<label class="chk"><input id="npRand" type="checkbox"> ' + esc(t('new.random')) + '</label>' +
     (tmplNow && tmplNow.elements.length ? '<label class="chk"><input id="npTmpl" type="checkbox" checked> ' + esc(t('new.useTmpl', nLm(tmplNow), curvesOf(tmplNow).length)) + '</label>' : '') +
@@ -3690,6 +3791,8 @@ async function newProjectWindow() {
   await modal({
     title: t('new.title'), body,
     onOpen: (b) => {
+      const ni = b.querySelector('#npName'); ni.value = store.rootName.replace(/[\\/:*?"<>|]/g, '_'); setTimeout(() => ni.select(), 40);
+      ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') $('modalFoot').querySelector('.primary').click(); });
       b.querySelector('#npSub').checked = imagePaths(false).length === 0 && imagePaths(true).length > 0;
       b.querySelector('#npSub').addEventListener('change', info); info();
     },
@@ -3697,7 +3800,10 @@ async function newProjectWindow() {
       const sub = body.querySelector('#npSub').checked;
       let im = imagePaths(sub);
       if (!im.length) { toast(t('new.none'), 'warn'); return true; }
-      const name = store.rootName.replace(/[\\/:*?"<>|]/g, '_');
+      const name = body.querySelector('#npName').value.trim().replace(/[\\/:*?"<>|]/g, '_').replace(/\.lmproj$/i, '');
+      if (!name) { toast(t('fb.badName'), 'warn'); return true; }
+      const pf = name + '.' + EXT_PROJ;
+      if (hasFile(pf)) { toast(t('new.exists', pf), 'warn'); return true; }
       if (body.querySelector('#npRand').checked) im = im.map((v) => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map((v) => v[1]);
       const useT = body.querySelector('#npTmpl') && body.querySelector('#npTmpl').checked;
       const pr = emptyProject(name);
@@ -3706,8 +3812,12 @@ async function newProjectWindow() {
       pr.specimens = im.map((f) => { const id = uniqueId(stripExt(f), used); used.push(id); return newSpecimen(f, id, pr.template); });
       closeModal('ok');
       loadProject(pr, '');
-      await cmdSaveAs();
-      if (!pr.template.elements.length) templateWindow();
+      // save straight into the images folder with the chosen name: no extra "Save as" window
+      store.projFile = pf; $('projName').textContent = P.name;
+      if (store.root) {
+        try { store.projHandle = await store.root.getFileHandle(pf, { create: true }); store.files.set(pf.toLowerCase(), { path: pf, handle: store.projHandle }); await saveNow(); }
+        catch (e) { store.projHandle = null; await cmdSaveAs(); }
+      }
       return true;
     } }],
   });
@@ -3844,9 +3954,6 @@ async function cmdExportTps() {
   if (!P.template.elements.length) { toast(t('ex.noTmpl'), 'warn'); return; }
   const body = '<label class="fld">' + esc(t('sa.name')) + '<span class="row"><input id="exName" type="text"><span class="small-muted">.tps</span></span></label>' +
     '<p class="small-muted">' + esc(t('ex.info')) + '</p>' +
-    (P.specimens.some((y) => y.outlines.length) ? (outlinesInTpsOk(P)
-      ? '<label class="chk"><input type="checkbox" id="exOut"> ' + esc(t('ex.outlines')) + '</label><p class="small-muted">' + esc(t('ex.outlinesP')) + '</p>'
-      : '<p class="small-muted">' + esc(t('ex.outlinesNo')) + '</p>') : '') +
     '<p class="small-muted">' + esc(store.root ? t('io.where', store.rootName) : t('sa.download')) + '</p>';
   await modal({ title: t('fm.exportTps'), body, onOpen: (b) => { const i = b.querySelector('#exName'); i.value = stripExt(store.projFile || P.name) + '_export'; i.focus(); i.select();
       i.addEventListener('keydown', (e) => { if (e.key === 'Enter') $('modalFoot').querySelector('.primary').click(); }); },
@@ -3855,9 +3962,8 @@ async function cmdExportTps() {
       if (!name) { toast(t('fb.badName'), 'warn'); return true; }
       const f = name + '.tps';
       if (store.root && hasFile(f) && !$('exName').dataset.confirm) { $('exName').dataset.confirm = '1'; toast(t('fb.overwrite', f), 'warn'); return true; }
-      const withOut = !!($('exOut') && $('exOut').checked);
       closeModal('ok');
-      try { await writeText(f, buildTPS(P, { outlines: withOut })); toast(t('ex.done', f)); } catch (e) { toast(t('n.saveFail', e.message), 'warn'); }
+      try { await writeText(f, buildTPS(P)); toast(t('ex.done', f)); } catch (e) { toast(t('n.saveFail', e.message), 'warn'); }
       return true;
     } }] });
 }
@@ -3902,11 +4008,42 @@ async function cmdImportTps() {
   const f = await pickTpsFile(); if (!f) return;
   const r = parseTPS(f.text);
   if (!r.blocks.length) { toast(t('tps.notTps', f.name), 'warn'); return; }
+  // Same specimens (by ID, or by image name when the TPS has no ID)? Then just update their coordinates.
+  const match = matchTpsBlocks(r.blocks);
+  if (match) { await updateFromTps(r, f.text, f.name, match); return; }
   const v = await modal({ title: t('imp.title'), body: '<p>' + t('imp.body', '<b>' + esc(f.name) + '</b>', r.blocks.length, '<b>' + esc(P.name) + '</b>', P.specimens.length) + '</p>' +
       '<ul class="small-muted"><li>' + esc(t('imp.appendInfo')) + '</li><li>' + esc(t('imp.replaceInfo')) + '</li></ul>',
     buttons: [{ label: t('btn.cancel'), value: null }, { label: t('imp.replace'), value: 'rep', kind: 'danger' }, { label: t('imp.append'), value: 'app', kind: 'primary' }] });
   if (v === 'app') await appendTps(f.text, f.name);
   if (v === 'rep') await replaceFromTps(f.text, f.name);
+}
+function matchTpsBlocks(blocks) {
+  if (!P || blocks.length !== P.specimens.length) return null;
+  const key = (v) => String(v || '').trim().toLowerCase();
+  const imgKey = (f) => key(stripExt(baseName(String(f || '').replace(/\\/g, '/'))));
+  const match = blocks.map((bk) => {
+    let k = bk.id ? P.specimens.findIndex((y) => key(y.id) === key(bk.id)) : -1;
+    if (!bk.id && bk.image) k = P.specimens.findIndex((y) => y.file && imgKey(y.file) === imgKey(bk.image));
+    return k;
+  });
+  return match.every((k) => k >= 0) && new Set(match).size === match.length ? match : null;
+}
+async function updateFromTps(r, text, name, match) {
+  const lay = tpsLayout(r.blocks, P.template.elements.length ? P.template : null);
+  if (lay.error || lay.mode === 'generic' || lay.mode === 'mismatch') return replaceFromTps(text, name);
+  const upd = blocksToSpecimens(r.blocks, P.template, lay.mode);
+  upd.forEach((nx, j) => {
+    const y = P.specimens[match[j]];
+    // undo the mirroring applied on export, so the points land on the image again
+    const fx = P.settings.flipExport !== false && ((y.flip && y.w) || (y.flipY && y.h));
+    const un = (p) => (isPt(p) && fx ? { x: y.flip && y.w ? y.w - p.x : p.x, y: y.flipY && y.h ? y.h - p.y : p.y } : p);
+    y.lm = nx.lm.map(un); y.curves = nx.curves.map((c) => (c ? c.map(un) : c)); y.fixed = nx.fixed; y.cvNA = nx.cvNA;
+    if (nx.scale) y.scale = nx.scale;
+    normalizeSpecimen(y, P.template);
+  });
+  draft = null; changed(); renderSpecList(); openSpec(Math.max(0, cur), true);
+  toast(t('imp.updated', upd.length, name));
+  if (r.commas) toast(t('tps.commas'));
 }
 async function replaceFromTps(text, name) {
   const r = parseTPS(text);
@@ -4141,8 +4278,9 @@ function cmdHelp() { modal({ title: t('help.title'), body: '<div class="help">' 
 async function renderWelcome() {
   const w = $('welcome');
   let h = '<img class="wlogo" src="' + LOGO_FULL + '" alt="Landmark Studio"><p class="wcredit">' + esc(t('credit')) + '</p><p>' + t('welcome.p1web') + '</p><p>' + esc(t('welcome.p2web')) + '</p>' +
-    '<div class="wbtns"><button class="mbtn primary" data-w="new">' + esc(t('tb.new')) + '</button><button class="mbtn" data-w="open">' + esc(t('tb.open')) + '</button>' +
+    '<button class="mbtn primary bigpick" data-w="folder">📁 ' + esc(t('tb.selectFolder')) + '</button><div class="wbtns"><button class="mbtn" data-w="open">' + esc(t('tb.open')) + '</button>' +
     '<button class="mbtn" data-w="tmpl">' + esc(t('tb.template')) + '</button><button class="mbtn" data-w="help">' + esc(t('welcome.howto')) + '</button></div>';
+  h += '<p class="small-muted">' + esc(t('welcome.folderTip')) + '</p>';
   if (!HAS_FS) h += '<div class="issue aviso compat"><b>' + esc(t('compat.title')) + '</b>' + esc(t('compat.body')) + '</div>';
   const rec = await recentList();
   if (rec.length) {
@@ -4153,7 +4291,7 @@ async function renderWelcome() {
   if (bk && bk.dirty && bk.proj) h += '<div class="issue info"><b>' + esc(t('welcome.recoverT')) + '</b>' + esc(t('welcome.recoverP', bk.proj.name, new Date(bk.date).toLocaleString())) +
     ' <button class="mbtn" data-w="recover">' + esc(t('welcome.recover')) + '</button></div>';
   w.innerHTML = h;
-  w.querySelectorAll('[data-w]').forEach((b) => b.addEventListener('click', () => ({ new: cmdNew, open: cmdOpen, tmpl: templateWindow, help: cmdHelp, recover: recoverBackup })[b.dataset.w]()));
+  w.querySelectorAll('[data-w]').forEach((b) => b.addEventListener('click', () => ({ folder: cmdSelectFolder, new: cmdNew, open: cmdOpen, tmpl: templateWindow, help: cmdHelp, recover: recoverBackup })[b.dataset.w]()));
   w.querySelectorAll('[data-r]').forEach((b) => b.addEventListener('click', () => openRecent(rec[+b.dataset.r])));
 }
 async function openRecent(r) {
@@ -4171,7 +4309,7 @@ async function recoverBackup() {
   });
 }
 
-on('btnNew', cmdNew);
+on('btnNew', cmdSelectFolder);
 on('btnOpen', cmdOpen);
 on('btnImportTps', cmdImportTps);
 on('btnSave', () => { if (P) saveNow(); });
