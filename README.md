@@ -54,7 +54,6 @@ Landmark Studio is free software: you can redistribute it and/or modify it under
 
 Landmark Studio es una aplicación de navegador para digitalizar landmarks y semilandmarks sobre fotografías, para morfometría geométrica. Es un único archivo HTML: no necesita instalación, ni servidor, ni conexión a internet, y lee y escribe archivos TPS compatibles con tpsDig2, geomorph y MorphoJ.
 
-**Úsala en línea:** https://oscarsanisidro.github.io/landmark-studio/  
 **DOI:** [10.5281/zenodo.23965715](https://doi.org/10.5281/zenodo.23965715)  
 **Úsala sin conexión:** descarga `index.html` y ábrelo en Edge o Chrome.
 
